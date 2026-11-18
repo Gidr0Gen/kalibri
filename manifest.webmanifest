@@ -1,0 +1,15 @@
+{
+  "name": "Kalibri",
+  "short_name": "Kalibri",
+  "description": "Snap a meal, estimate calories, track your goals.",
+  "display": "standalone",
+  "start_url": "./",
+  "scope": "./",
+  "theme_color": "#c3e85a",
+  "background_color": "#f4f5f0",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,93 @@
+/* Kalibri design tokens — restyle the whole app from this file only.
+   Light is the default; the dark block below overrides colors when the OS is in dark mode. */
+:root {
+  /* colors */
+  --color-bg: #f4f5f0;
+  --color-surface: #ffffff;
+  --color-surface-2: #eceee6;
+  --color-border: #dfe2d6;
+  --color-hairline: rgba(27, 33, 22, 0.08);
+  --color-text: #1b2116;
+  --color-muted: #5c6455;
+  --color-primary: #c3e85a;          /* lime fills: buttons, selected day, gauge */
+  --color-primary-deep: #8fc22a;     /* gradient end */
+  --color-primary-ink: #4d7c0f;      /* lime-family text/icons on the page bg (AA) */
+  --color-primary-contrast: #1b2a08; /* text on lime */
+  --color-primary-soft: #e6f3bf;
+  --color-glow: rgba(195, 232, 90, 0.32);
+  --color-warn: #b45309;
+  --color-warn-soft: #fdecd2;
+  --color-danger: #b42318;
+  --color-danger-soft: #fde8e6;
+  --color-good: #3f7d0b;
+  --color-good-soft: #e1f2c4;
+  --color-protein: #e5533d;
+  --color-carbs: #e08a00;
+  --color-fat: #6aa317;
+  --color-in-range: #6aa317;
+  --color-out-range: #e0a24a;
+  --color-overlay: rgba(20, 28, 24, 0.5);
+  --color-nav: rgba(255, 255, 255, 0.82);
+
+  --gradient-hero: linear-gradient(140deg, #d9f47f 0%, #bfe449 55%, #a5d12f 100%);
+
+  /* radii */
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-full: 999px;
+
+  /* spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* type */
+  --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-size-sm: 13px;
+  --font-size-md: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 28px;
+
+  /* layout */
+  --content-max: 480px;
+  --tabbar-h: 68px;
+  --tap-min: 44px;
+
+  /* elevation */
+  --shadow-card: 0 1px 2px rgba(27, 33, 22, 0.04), 0 8px 24px rgba(27, 33, 22, 0.06);
+  --shadow-pop: 0 12px 40px rgba(27, 33, 22, 0.18);
+  --shadow-lime: 0 10px 24px rgba(143, 194, 42, 0.45);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0e120b;
+    --color-surface: #171c12;
+    --color-surface-2: #222a1a;
+    --color-border: #2c3623;
+    --color-hairline: rgba(238, 242, 230, 0.09);
+    --color-text: #eef2e6;
+    --color-muted: #a3ad98;
+    --color-primary-ink: #c3e85a;
+    --color-primary-soft: #2a3516;
+    --color-glow: rgba(195, 232, 90, 0.12);
+    --color-warn: #f0a24a;
+    --color-warn-soft: #3a2a12;
+    --color-danger: #ff8a7a;
+    --color-danger-soft: #3a1a17;
+    --color-good: #c3e85a;
+    --color-good-soft: #2a3516;
+    --color-fat: #8fc22a;
+    --color-in-range: #a5d12f;
+    --color-overlay: rgba(0, 0, 0, 0.62);
+    --color-nav: rgba(23, 28, 18, 0.82);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-pop: 0 12px 40px rgba(0, 0, 0, 0.6);
+    --shadow-lime: 0 10px 24px rgba(143, 194, 42, 0.28);
+  }
+}
