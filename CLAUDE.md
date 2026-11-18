@@ -15,7 +15,13 @@ If Node becomes available and the user wants the original stack, port module-by-
 python3 server.py        # http://localhost:5173 (SPA fallback for /progress, /profile)
 python3 scripts/make_icons.py   # regenerate icons/ (stdlib only)
 ```
-No install step, no build, no tests yet. Preview config: `.claude/launch.json` (`kalibri`).
+No install step, no build, no tests yet.
+
+## Deploy (permanent link)
+Live at **https://gidr0gen.github.io/kalibri/** (GitHub Pages, repo `Gidr0Gen/kalibri`, branch `main`, root).
+Publish changes with `sh scripts/deploy.sh "message"` (copies `index.html` → `404.html` for deep-link fallback, commits, pushes). Pages rebuild takes ~1 min.
+Paths are base-relative on purpose (`./src/...`, router `BASE` from `import.meta.url`) so the app works at `/` (dev) and `/kalibri/` (Pages). Don't reintroduce absolute `/...` URLs.
+`calorie-app.md` and `.claude/` are git-ignored (not published). Free tunnels (localhost.run) were unreliable — don't use them for the phone. Preview config: `.claude/launch.json` (`kalibri`).
 
 ## Layout
 - `index.html`, `manifest.webmanifest`, `sw.js` (network-first + cache fallback; **add new shell files to `SHELL` and bump `CACHE`**)
