@@ -117,3 +117,17 @@ export function importJson(text) {
   return { ok: true };
 }
 export function reset() { state = defaults(); persist(); listeners.forEach((l) => l()); }
+
+// ---- A/B test assignment (separate key so reset/import never reshuffles users) ----
+// Override for QA: ?ab_body_data=test|control (not persisted).
+export function abVariant(name) {
+  const forced = new URLSearchParams(location.search).get(`ab_${name}`);
+  if (forced === 'test' || forced === 'control') return forced;
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem('kalibri-ab') || '{}'); } catch { /* ignore */ }
+  if (all[name] !== 'test' && all[name] !== 'control') {
+    all[name] = Math.random() < 0.5 ? 'test' : 'control';
+    try { localStorage.setItem('kalibri-ab', JSON.stringify(all)); } catch { /* ignore */ }
+  }
+  return all[name];
+}

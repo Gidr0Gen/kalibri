@@ -3,6 +3,7 @@ import { h, resizeJpeg, kgToLb, lbToKg, cmToFtIn, ftInToCm, round1 } from '../li
 import * as store from '../lib/storage.js';
 import { openSheet, confirmDialog, num } from '../lib/ui.js';
 import { icon } from '../lib/icons.js';
+import { track, register } from '../lib/analytics.js';
 import { recommend, ageFrom, ACTIVITY_LABELS } from '../lib/nutrition.js';
 
 const set = (patch, silent) => store.update((s) => { Object.assign(s.profile, patch); }, { silent });
@@ -52,7 +53,7 @@ function recommended(p) {
       : h('button', { class: 'btn dark', onclick: () => store.setDailyGoal(r.kcal) }, icon('target', 18), 'Use as daily goal'));
 }
 
-function bodyData(p) {
+function bodyForm(p, extraRight) {
   const imp = p.units === 'imperial';
   const w = store.currentWeight();
   let height;
@@ -76,7 +77,43 @@ function bodyData(p) {
     row('Weight', weight),
     row('Activity', h('select', { value: p.activity, 'aria-label': 'Activity level', onchange: (e) => set({ activity: e.target.value }) }, opts(Object.entries(ACTIVITY_LABELS)))),
     row('Aim', h('select', { value: p.aim, 'aria-label': 'Aim', onchange: (e) => set({ aim: e.target.value }) }, opts([['lose', 'Lose weight'], ['maintain', 'Maintain'], ['gain', 'Gain weight']]))),
-  ], units);
+  ], extraRight || units);
+}
+
+// ---- A/B: control = form rows, test = macro tiles + Edit button ----
+let editing = false;
+let exposed = false;
+const tile = (ico, label, value, unit) => h('div', { class: 'btile' },
+  h('span', { class: 'btile-ico' }, icon(ico, 20)),
+  h('strong', {}, value, unit ? h('small', {}, ` ${unit}`) : null),
+  h('span', { class: 'btile-label' }, label));
+
+function bodyTiles(p) {
+  const imp = p.units === 'imperial';
+  const w = store.currentWeight();
+  const age = ageFrom(p.birthDate);
+  const heightV = !p.heightCm ? ['—'] : imp ? (() => { const { ft, inch } = cmToFtIn(p.heightCm); return [`${ft}′${inch}″`]; })() : [Math.round(p.heightCm), 'cm'];
+  const weightV = w == null ? ['—'] : imp ? [round1(kgToLb(w)), 'lb'] : [round1(w), 'kg'];
+  const sexV = p.sex ? (p.sex === 'female' ? 'Female' : 'Male') : '—';
+  const act = ACTIVITY_LABELS[p.activity] ? ACTIVITY_LABELS[p.activity].split(' (')[0] : '—';
+  const aim = { lose: 'Lose', maintain: 'Maintain', gain: 'Gain' }[p.aim] || '—';
+  const editBtn = h('button', { class: 'btn-edit', onclick: () => { editing = true; track('body_edit_opened'); store.update(() => {}); } }, icon('edit', 16), 'Edit');
+  return h('section', {},
+    h('h3', { class: 'group-title' }, h('span', {}, 'Body data'), editBtn),
+    h('div', { class: 'btiles' },
+      tile('user', 'Sex', sexV),
+      tile('calendar', 'Age', age ?? '—', age != null ? 'yrs' : ''),
+      tile('ruler', 'Height', ...heightV),
+      tile('scale', 'Weight', ...weightV),
+      tile('activity', 'Activity', act),
+      tile('target', 'Aim', aim)));
+}
+
+function bodyData(p, variant) {
+  if (variant !== 'test') return bodyForm(p);
+  if (!editing) return bodyTiles(p);
+  const done = h('button', { class: 'btn-edit on', onclick: () => { editing = false; track('body_edit_done'); store.update(() => {}); } }, icon('check', 16), 'Done');
+  return bodyForm(p, h('span', { class: 'edit-actions' }, done));
 }
 
 function dataBlock() {
@@ -102,7 +139,10 @@ function dataBlock() {
 export function profileScreen() {
   store.ensureDefaultGoals();
   const p = store.get().profile;
+  const variant = store.abVariant('body_data');
+  register({ ab_body_data: variant });
+  if (!exposed) { exposed = true; track('ab_exposure', { experiment: 'body_data', variant }); }
   return h('div', { class: 'screen' },
-    hero(p), recommended(p), bodyData(p), dataBlock(),
+    hero(p), recommended(p), bodyData(p, variant), dataBlock(),
     h('footer', { class: 'foot' }, h('p', {}, `${store.APP_NAME} v${store.APP_VERSION}`), h('p', {}, 'Demo estimates only. This app does not give medical advice.')));
 }

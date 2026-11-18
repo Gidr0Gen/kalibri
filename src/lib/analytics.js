@@ -6,6 +6,7 @@ export const POSTHOG_HOST = 'https://us.i.posthog.com';    // EU projects: https
 const ASSETS_HOST = POSTHOG_HOST.replace('.i.posthog.com', '-assets.i.posthog.com');
 
 const queue = [];
+const supers = {};
 let ready = false;
 
 function flush() {
@@ -33,6 +34,7 @@ export function initAnalytics() {
         ph.register({
           environment: /^(localhost|127\.|192\.168\.)/.test(location.hostname) ? 'dev' : 'prod',
           display_mode: matchMedia('(display-mode: standalone)').matches || navigator.standalone ? 'pwa' : 'browser',
+          ...supers,
         });
         flush();
       },
@@ -40,6 +42,13 @@ export function initAnalytics() {
   };
   s.onerror = () => { queue.length = 0; };  // offline / blocked: drop silently
   document.head.append(s);
+}
+
+// Attach properties (e.g. A/B variant) to every later event.
+export function register(props) {
+  if (!POSTHOG_KEY) return;
+  Object.assign(supers, props);
+  if (ready) window.posthog.register(props);
 }
 
 export function track(name, props = {}) {

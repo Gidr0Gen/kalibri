@@ -275,6 +275,14 @@ input[type=text].name-input:focus { border-bottom-color: var(--color-primary-dee
 .list-row .pair input { width: 56px; max-width: none; }
 .list-row .chev { color: var(--color-muted); }
 .list-row.danger .row-label { color: var(--color-danger); }
+.btiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-3); }
+.btile { background: var(--color-surface); border: 1px solid var(--color-hairline); border-radius: var(--radius-md); padding: var(--space-4); box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 2px; }
+.btile-ico { width: 40px; height: 40px; border-radius: 14px; display: grid; place-items: center; background: var(--color-primary-soft); color: var(--color-primary-ink); margin-bottom: var(--space-2); }
+.btile strong { font: 800 24px/1.15 var(--font-display); letter-spacing: -0.03em; }
+.btile strong small { font-size: 14px; font-weight: 700; color: var(--color-muted); letter-spacing: 0; }
+.btile-label { font-size: 12px; font-weight: 700; color: var(--color-muted); text-transform: uppercase; letter-spacing: .04em; }
+.btn-edit { display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap-min); padding: 0 var(--space-4); border-radius: var(--radius-full); border: 1px solid var(--color-border); background: var(--color-surface); color: var(--color-text); font-weight: 700; }
+.btn-edit.on { background: var(--color-primary); color: var(--color-primary-contrast); border-color: transparent; }
 .reco-card { background: var(--gradient-hero); color: var(--color-primary-contrast); border: 0; box-shadow: var(--shadow-lime); display: flex; flex-direction: column; gap: var(--space-3); }
 .reco-num { display: flex; align-items: baseline; gap: var(--space-2); }
 .reco-num strong { font: 900 52px/1 var(--font-display); letter-spacing: -0.04em; }
