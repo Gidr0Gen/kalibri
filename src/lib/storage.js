@@ -131,3 +131,13 @@ export function abVariant(name) {
   }
   return all[name];
 }
+
+// True only the first time per device for a given name (e.g. one-off analytics milestones).
+export function once(name) {
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem('kalibri-once') || '{}'); } catch { /* ignore */ }
+  if (all[name]) return false;
+  all[name] = 1;
+  try { localStorage.setItem('kalibri-once', JSON.stringify(all)); } catch { /* ignore */ }
+  return true;
+}

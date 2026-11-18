@@ -83,6 +83,7 @@ function bodyForm(p, extraRight) {
 // ---- A/B: control = form rows, test = macro tiles + Edit button ----
 let editing = false;
 let exposed = false;
+const FLAG = 'body-data-ui';   // PostHog experiment flag key; variants: control / test
 const tile = (ico, label, value, unit) => h('div', { class: 'btile' },
   h('span', { class: 'btile-ico' }, icon(ico, 20)),
   h('strong', {}, value, unit ? h('small', {}, ` ${unit}`) : null),
@@ -140,8 +141,14 @@ export function profileScreen() {
   store.ensureDefaultGoals();
   const p = store.get().profile;
   const variant = store.abVariant('body_data');
-  register({ ab_body_data: variant });
-  if (!exposed) { exposed = true; track('ab_exposure', { experiment: 'body_data', variant }); }
+  register({ ab_body_data: variant, [`$feature/${FLAG}`]: variant });
+  if (!exposed) {
+    exposed = true;
+    track('$feature_flag_called', { $feature_flag: FLAG, $feature_flag_response: variant });   // PostHog experiment exposure
+    track('ab_exposure', { experiment: 'body_data', variant });
+  }
+  // Goal metric: all body fields filled in (fires once per device)
+  if (p.sex && p.birthDate && p.heightCm && store.currentWeight() != null && store.once('profile_completed')) track('profile_completed');
   return h('div', { class: 'screen' },
     hero(p), recommended(p), bodyData(p, variant), dataBlock(),
     h('footer', { class: 'foot' }, h('p', {}, `${store.APP_NAME} v${store.APP_VERSION}`), h('p', {}, 'Demo estimates only. This app does not give medical advice.')));
