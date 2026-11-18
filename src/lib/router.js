@@ -1,6 +1,7 @@
 // Tiny History-API router: /, /progress, /profile + bottom tab bar.
 import { h, svg } from './util.js';
 import * as store from './storage.js';
+import { trackPageview } from './analytics.js';
 
 // Works at the domain root (dev) and under a sub-path (GitHub Pages: /kalibri/).
 const BASE = new URL('../../', import.meta.url).pathname.replace(/\/$/, '');
@@ -24,6 +25,7 @@ export function rerender() {
   const path = routes[cur] ? cur : '/';
   if (path !== lastPath) {
     lastPath = path;
+    trackPageview(path);
     viewEl.classList.add('enter');
     clearTimeout(enterTimer);
     enterTimer = setTimeout(() => viewEl.classList.remove('enter'), 900);

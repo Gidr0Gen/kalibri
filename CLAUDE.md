@@ -31,6 +31,7 @@ Also on **Vercel**: https://kalibri-omega.vercel.app (project `kalibri`, account
 - `src/lib/storage.js` — **all** localStorage access, single key `kalibri-v1`, metric units only
 - `src/lib/estimator.js` — `estimate(image: Blob)`; simulated (10 sample meals, ±15% grams). Only API the scanner calls — swap for real AI here
 - `src/lib/nutrition.js` — Mifflin–St Jeor / TDEE recommendation
+- `src/lib/analytics.js` — PostHog (CDN-loaded, no build). Set `POSTHOG_KEY` to enable; empty = no-op. `track(name, props)`; pageviews sent by router; scanner emits `scan_started/analyzed/failed/saved`. Never send meal names, weights or photos
 - `src/lib/ui.js` — sheet, confirm dialog, items editor; `src/lib/util.js` — DOM `h()`/`svg()`, dates, image resize, unit conversion
 - `src/screens/{today,scanner,progress,profile}.js` — one file per screen
 - `src/styles/tokens.css` — **all** colors/radii/spacing/fonts; the app must be restylable from this file alone. `app.css` uses only tokens

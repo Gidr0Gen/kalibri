@@ -4,9 +4,11 @@ import * as store from '../lib/storage.js';
 import { estimate } from '../lib/estimator.js';
 import { itemsEditor, field } from '../lib/ui.js';
 import { icon } from '../lib/icons.js';
+import { track } from '../lib/analytics.js';
 
 export function openScanner({ date }) {
   let stream = null;
+  track('scan_started');
   const modal = h('div', { class: 'scanner', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Food scanner' });
   const fileInput = h('input', { type: 'file', accept: 'image/*', class: 'sr-only', 'aria-label': 'Choose a photo', onchange: (e) => { const f = e.target.files[0]; e.target.value = ''; if (f) analyze(f); } });
 
@@ -64,8 +66,10 @@ export function openScanner({ date }) {
     try {
       const thumbnail = await resizeJpeg(blob, { size: 240 });
       const est = await estimate(blob);
+      track('scan_analyzed', { confidence: est.confidence, total_kcal: est.totalKcal, item_count: est.items.length });
       resultState({ ...est, thumbnail }, url);
     } catch {
+      track('scan_failed');
       errorState('That image could not be read. Try another photo.', () => cameraState());
     }
   }
@@ -98,6 +102,7 @@ export function openScanner({ date }) {
       id: crypto.randomUUID(), createdAt: when.toISOString(), dish: draft.dish.trim() || 'Meal',
       items: draft.items, totalKcal: draft.totalKcal, confidence: draft.confidence, thumbnail: draft.thumbnail,
     });
+    track('scan_saved', { saved_total: store.get().scans.length, total_kcal: draft.totalKcal, item_count: draft.items.length, confidence: draft.confidence });
     close();
   }
 

@@ -1,10 +1,10 @@
 // Kalibri service worker: precache the app shell, network-first with cache fallback
 // (always fresh when online, fully working offline). Bump CACHE when adding shell files.
-const CACHE = 'kalibri-shell-v4';
+const CACHE = 'kalibri-shell-v5';
 const SHELL = [
   './', './index.html', './manifest.webmanifest',
   './src/main.js', './src/styles/tokens.css', './src/styles/app.css',
-  './src/lib/util.js', './src/lib/storage.js', './src/lib/estimator.js', './src/lib/nutrition.js', './src/lib/router.js', './src/lib/ui.js', './src/lib/icons.js',
+  './src/lib/util.js', './src/lib/storage.js', './src/lib/estimator.js', './src/lib/nutrition.js', './src/lib/router.js', './src/lib/ui.js', './src/lib/icons.js', './src/lib/analytics.js',
   './src/screens/today.js', './src/screens/scanner.js', './src/screens/progress.js', './src/screens/profile.js',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-512-maskable.png', './icons/apple-touch-icon.png', './icons/favicon.svg',
 ];
