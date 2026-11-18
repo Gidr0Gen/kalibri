@@ -27,7 +27,15 @@ export function initAnalytics() {
       capture_pageview: false,          // SPA: pageviews are sent by the router
       disable_session_recording: true,
       person_profiles: 'identified_only',
-      loaded: flush,
+      capture_pageleave: true,          // time on page for Web analytics
+      loaded: (ph) => {
+        // Super properties on every event: lets dashboards split dev vs prod and PWA vs browser tab.
+        ph.register({
+          environment: /^(localhost|127\.|192\.168\.)/.test(location.hostname) ? 'dev' : 'prod',
+          display_mode: matchMedia('(display-mode: standalone)').matches || navigator.standalone ? 'pwa' : 'browser',
+        });
+        flush();
+      },
     });
   };
   s.onerror = () => { queue.length = 0; };  // offline / blocked: drop silently
@@ -39,5 +47,7 @@ export function track(name, props = {}) {
   if (ready) window.posthog.capture(name, props);
   else if (queue.length < 50) queue.push([name, props]);
 }
+
+window.addEventListener('appinstalled', () => track('pwa_installed'));
 
 export const trackPageview = (path) => track('$pageview', { $current_url: location.href, path });
