@@ -19,9 +19,9 @@ No install step, no build, no tests yet.
 
 ## Deploy (permanent link)
 Live at **https://gidr0gen.github.io/kalibri/** (GitHub Pages, repo `Gidr0Gen/kalibri`, branch `main`, root).
-Publish changes with `sh scripts/deploy.sh "message"` (copies `index.html` → `404.html` for deep-link fallback, commits, pushes). Pages rebuild takes ~1 min.
+Publish with ONE command: `sh scripts/deploy.sh "message"` — commits, pushes to GitHub (Pages rebuilds in ~1 min) and runs `vercel deploy --prod` (adds Node PATH itself).
 Paths are base-relative on purpose (`./src/...`, router `BASE` from `import.meta.url`) so the app works at `/` (dev) and `/kalibri/` (Pages). Don't reintroduce absolute `/...` URLs.
-Also on **Vercel**: https://kalibri-omega.vercel.app (project `kalibri`, account via `vercel login`; Node lives in `~/.local/node`, so `export PATH="$HOME/.local/node/bin:$PATH"` first). Redeploy: `vercel deploy --prod --yes` from the repo root. Config: `vercel.json` (SPA rewrite), `.vercelignore`. Not connected to GitHub auto-deploy (needs a GitHub Login Connection in Vercel).
+Also on **Vercel**: https://kalibri-omega.vercel.app (project `kalibri`, account via `vercel login`; Node lives in `~/.local/node`, so `export PATH="$HOME/.local/node/bin:$PATH"` first). Config: `vercel.json` (SPA rewrite), `.vercelignore`. Not connected to GitHub auto-deploy (needs a GitHub Login Connection in Vercel).
 `calorie-app.md` and `.claude/` are git-ignored (not published). Free tunnels (localhost.run) were unreliable — don't use them for the phone. Preview config: `.claude/launch.json` (`kalibri`).
 
 ## Layout
